@@ -3,21 +3,22 @@ package br.com.mocktester.api.services.impl;
 import br.com.mocktester.api.domain.People;
 import br.com.mocktester.api.repository.PeopleRepository;
 import br.com.mocktester.api.services.PeopleService;
-import lombok.AllArgsConstructor;
+import br.com.mocktester.api.services.exceptions.ObjectNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+@Service
 @RequiredArgsConstructor
 public class PeopleServiceImpl implements PeopleService {
 
-
-    private PeopleRepository peopleRepository;
+    private final PeopleRepository peopleRepository;
 
     @Override
     public People findById(Integer id) {
 
         Optional<People> obj = peopleRepository.findById(id);
-        return obj.orElse(null);
+        return obj.orElseThrow(() -> new ObjectNotFoundException("Objeto não encontrado"));
     }
 }

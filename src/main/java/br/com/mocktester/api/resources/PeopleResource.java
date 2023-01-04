@@ -13,8 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = "/people")
 @RequiredArgsConstructor
 public class PeopleResource {
-
-    private PeopleService peopleService;
+    private final PeopleService peopleService;
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<People> findById(@PathVariable Integer id){
