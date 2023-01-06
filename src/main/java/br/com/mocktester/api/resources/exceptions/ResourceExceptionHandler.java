@@ -1,5 +1,6 @@
 package br.com.mocktester.api.resources.exceptions;
 
+import br.com.mocktester.api.services.exceptions.DataIntegratyViolationException;
 import br.com.mocktester.api.services.exceptions.ObjectNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
@@ -19,5 +20,10 @@ public class ResourceExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(standardError);
     }
 
-
+    @ExceptionHandler(DataIntegratyViolationException.class)
+    public ResponseEntity<StandardError> validationEmail(DataIntegratyViolationException ex, HttpServletRequest request){
+        StandardError standardError =
+                new StandardError(LocalDateTime.now(), HttpStatus.BAD_REQUEST.value(), ex.getMessage(), request.getRequestURI());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(standardError);
+    }
 }

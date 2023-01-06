@@ -4,6 +4,7 @@ import br.com.mocktester.api.domain.People;
 import br.com.mocktester.api.domain.dto.PeopleDTO;
 import br.com.mocktester.api.repository.PeopleRepository;
 import br.com.mocktester.api.services.PeopleService;
+import br.com.mocktester.api.services.exceptions.DataIntegratyViolationException;
 import br.com.mocktester.api.services.exceptions.ObjectNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -33,8 +34,15 @@ public class PeopleServiceImpl implements PeopleService {
 
     @Override
     public People create(PeopleDTO obj) {
-
+        findByEmail(obj);
         People map = mapper.map(obj, People.class);
         return peopleRepository.save(map);
+    }
+
+    private void findByEmail(PeopleDTO obj){
+        Optional<People> people = peopleRepository.findByEmail(obj.getEmail());
+        if (people.isPresent()) {
+            throw new DataIntegratyViolationException("Email já cadastrado");
+        }
     }
 }
