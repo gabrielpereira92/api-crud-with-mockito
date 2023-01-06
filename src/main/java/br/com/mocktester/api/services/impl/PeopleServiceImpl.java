@@ -1,10 +1,12 @@
 package br.com.mocktester.api.services.impl;
 
 import br.com.mocktester.api.domain.People;
+import br.com.mocktester.api.domain.dto.PeopleDTO;
 import br.com.mocktester.api.repository.PeopleRepository;
 import br.com.mocktester.api.services.PeopleService;
 import br.com.mocktester.api.services.exceptions.ObjectNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,6 +16,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class PeopleServiceImpl implements PeopleService {
 
+    private final ModelMapper mapper;
     private final PeopleRepository peopleRepository;
 
     @Override
@@ -26,5 +29,12 @@ public class PeopleServiceImpl implements PeopleService {
     @Override
     public List<People> findAllPeople() {
         return peopleRepository.findAll();
+    }
+
+    @Override
+    public People create(PeopleDTO obj) {
+
+        People map = mapper.map(obj, People.class);
+        return peopleRepository.save(map);
     }
 }
