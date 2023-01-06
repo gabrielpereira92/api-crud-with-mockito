@@ -7,6 +7,7 @@ import br.com.mocktester.api.services.exceptions.ObjectNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -20,5 +21,10 @@ public class PeopleServiceImpl implements PeopleService {
 
         Optional<People> obj = peopleRepository.findById(id);
         return obj.orElseThrow(() -> new ObjectNotFoundException("Objeto não encontrado"));
+    }
+
+    @Override
+    public List<People> findAllPeople() {
+        return peopleRepository.findAll();
     }
 }
