@@ -13,5 +13,6 @@ public interface PeopleService {
 
     People create(PeopleDTO obj);
 
+    People update(PeopleDTO obj);
 
 }

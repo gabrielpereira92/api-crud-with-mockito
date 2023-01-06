@@ -35,13 +35,21 @@ public class PeopleServiceImpl implements PeopleService {
     @Override
     public People create(PeopleDTO obj) {
         findByEmail(obj);
+        //O Mapper tem a função de transformar um Objeto x em um Dto dele
+        People map = mapper.map(obj, People.class);
+        return peopleRepository.save(map);
+    }
+
+    @Override
+    public People update(PeopleDTO obj) {
+        findByEmail(obj);
         People map = mapper.map(obj, People.class);
         return peopleRepository.save(map);
     }
 
     private void findByEmail(PeopleDTO obj){
         Optional<People> people = peopleRepository.findByEmail(obj.getEmail());
-        if (people.isPresent()) {
+        if (people.isPresent() && !people.get().getId().equals(obj.getId())) {
             throw new DataIntegratyViolationException("Email já cadastrado");
         }
     }
