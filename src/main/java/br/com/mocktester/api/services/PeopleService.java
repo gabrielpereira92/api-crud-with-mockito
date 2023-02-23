@@ -15,4 +15,6 @@ public interface PeopleService {
 
     People update(PeopleDTO obj);
 
+    void delete(Integer id);
+
 }

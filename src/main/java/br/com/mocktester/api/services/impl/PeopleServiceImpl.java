@@ -36,15 +36,21 @@ public class PeopleServiceImpl implements PeopleService {
     public People create(PeopleDTO obj) {
         findByEmail(obj);
         //O Mapper tem a função de transformar um Objeto x em um Dto dele
-        People map = mapper.map(obj, People.class);
-        return peopleRepository.save(map);
+        People people = mapper.map(obj, People.class);
+        return peopleRepository.save(people);
     }
 
     @Override
     public People update(PeopleDTO obj) {
         findByEmail(obj);
-        People map = mapper.map(obj, People.class);
-        return peopleRepository.save(map);
+        People people = mapper.map(obj, People.class);
+        return peopleRepository.save(people);
+    }
+
+    @Override
+    public void delete(Integer id) {
+        findById(id);
+        peopleRepository.deleteById(id);
     }
 
     private void findByEmail(PeopleDTO obj){
