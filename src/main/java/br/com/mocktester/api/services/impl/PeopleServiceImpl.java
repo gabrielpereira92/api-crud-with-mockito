@@ -8,17 +8,18 @@ import br.com.mocktester.api.services.exceptions.DataIntegratyViolationException
 import br.com.mocktester.api.services.exceptions.ObjectNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
-@RequiredArgsConstructor
 public class PeopleServiceImpl implements PeopleService {
-
-    private final ModelMapper mapper;
-    private final PeopleRepository peopleRepository;
+    @Autowired
+    private ModelMapper mapper;
+    @Autowired
+    private PeopleRepository peopleRepository;
 
     @Override
     public People findById(Integer id) {
