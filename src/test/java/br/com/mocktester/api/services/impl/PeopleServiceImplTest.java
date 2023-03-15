@@ -3,6 +3,7 @@ package br.com.mocktester.api.services.impl;
 import br.com.mocktester.api.domain.People;
 import br.com.mocktester.api.domain.dto.PeopleDTO;
 import br.com.mocktester.api.repository.PeopleRepository;
+import br.com.mocktester.api.services.exceptions.ObjectNotFoundException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -51,7 +52,7 @@ class PeopleServiceImplTest {
     void whenFindByIdThenReturnAnUserInstance() {
         when(peopleRepository.findById(anyInt())).thenReturn(optionalPeople);
 
-        People response = peopleService.findById(1);
+        People response = peopleService.findById(ID);
 
         assertNotNull(response);
         assertEquals(People.class, response.getClass());
@@ -61,6 +62,17 @@ class PeopleServiceImplTest {
 
     }
 
+    @Test
+    void whenFindByIdAnObjectNotFoundException() {
+        when(peopleRepository.findById(anyInt())).thenThrow(new ObjectNotFoundException("Objeto não encontrado"));
+
+        try {
+            peopleService.findById(ID);
+        } catch (Exception ex) {
+            assertEquals(ObjectNotFoundException.class, ex.getClass());
+            assertEquals("Objeto não encontrado", ex.getMessage());
+        }
+    }
     @Test
     void findAllPeople() {
     }
