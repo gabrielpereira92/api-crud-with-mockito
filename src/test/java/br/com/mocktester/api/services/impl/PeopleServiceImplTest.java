@@ -19,7 +19,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 
 @SpringBootTest
@@ -157,7 +157,12 @@ class PeopleServiceImplTest {
     }
 
     @Test
-    void delete() {
+    void deleteWhitSuccess() {
+        when(peopleRepository.findById(anyInt())).thenReturn(optionalPeople);
+        doNothing().when(peopleRepository).deleteById(anyInt());
+        peopleService.delete(ID);
+        verify(peopleRepository, times(1)).deleteById(anyInt());
+
     }
 
     private void startPeople() {
