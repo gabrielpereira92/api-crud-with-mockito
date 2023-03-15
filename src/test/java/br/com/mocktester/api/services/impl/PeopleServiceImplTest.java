@@ -31,6 +31,7 @@ class PeopleServiceImplTest {
     public static final String PASS = "123";
     public static final String OBJECT_NOT_FOUND_MESSAGE = "Objeto não encontrado";
     public static final Integer INDEX = 0;
+    public static final String EMAIL_ALREADY_EXISTENT = "Email já cadastrado";
     @InjectMocks
     private PeopleServiceImpl peopleService;
 
@@ -118,14 +119,41 @@ class PeopleServiceImplTest {
             peopleService.create(peopleDTO);
         } catch (Exception ex) {
             assertEquals(DataIntegratyViolationException.class, ex.getClass());
-            assertEquals("Email já cadastrado", ex.getMessage());
+            assertEquals(EMAIL_ALREADY_EXISTENT, ex.getMessage());
         }
 
 
     }
 
     @Test
-    void update() {
+    void whenUpdatePeopleReturnSuccess() {
+        when(peopleRepository.save(any())).thenReturn(people);
+
+        People response = peopleService.update(peopleDTO);
+
+        assertNotNull(response);
+        assertEquals(People.class, response.getClass());
+
+        assertEquals(ID, response.getId());
+        assertEquals(NAME, response.getName());
+        assertEquals(EMAIL, response.getEmail());
+        assertEquals(PASS, response.getPassword());
+    }
+
+    @Test
+    void whenUpdatePeopleReturnDataIntegrityViolationException() {
+        when(peopleRepository.findByEmail(anyString())).thenReturn(optionalPeople);
+
+        try {
+            optionalPeople.get().setId(2);
+            peopleService.update(peopleDTO);
+        } catch (Exception ex) {
+            assertEquals(DataIntegratyViolationException.class, ex.getClass());
+            assertEquals(EMAIL_ALREADY_EXISTENT, ex.getMessage());
+
+        }
+
+
     }
 
     @Test
