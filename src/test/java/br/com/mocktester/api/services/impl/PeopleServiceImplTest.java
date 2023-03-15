@@ -164,6 +164,18 @@ class PeopleServiceImplTest {
         verify(peopleRepository, times(1)).deleteById(anyInt());
 
     }
+    @Test
+    void deleteWithObjectNotFoundException(){
+
+        when(peopleRepository.findById(anyInt())).thenThrow(new ObjectNotFoundException(OBJECT_NOT_FOUND_MESSAGE));
+
+        try {
+            peopleService.delete(ID);
+        }catch (Exception ex){
+            assertEquals(ObjectNotFoundException.class, ex.getClass());
+            assertEquals(OBJECT_NOT_FOUND_MESSAGE, ex.getMessage());
+        }
+    }
 
     private void startPeople() {
         people = new People(ID, NAME, EMAIL, PASS);
