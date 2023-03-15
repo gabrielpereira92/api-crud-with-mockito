@@ -3,6 +3,7 @@ package br.com.mocktester.api.services.impl;
 import br.com.mocktester.api.domain.People;
 import br.com.mocktester.api.domain.dto.PeopleDTO;
 import br.com.mocktester.api.repository.PeopleRepository;
+import br.com.mocktester.api.services.exceptions.DataIntegratyViolationException;
 import br.com.mocktester.api.services.exceptions.ObjectNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,8 +18,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 
 
@@ -107,6 +107,21 @@ class PeopleServiceImplTest {
         assertEquals(NAME, response.getName());
         assertEquals(EMAIL, response.getEmail());
         assertEquals(PASS, response.getPassword());
+    }
+
+    @Test
+    void whenCreatePeopleReturnDataIntegrityViolationException() {
+        when(peopleRepository.findByEmail(anyString())).thenReturn(optionalPeople);
+
+        try {
+            optionalPeople.get().setId(2);
+            peopleService.create(peopleDTO);
+        } catch (Exception ex) {
+            assertEquals(DataIntegratyViolationException.class, ex.getClass());
+            assertEquals("Email já cadastrado", ex.getMessage());
+        }
+
+
     }
 
     @Test
