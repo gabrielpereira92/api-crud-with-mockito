@@ -3,18 +3,18 @@ package br.com.mocktester.api.resources;
 import br.com.mocktester.api.domain.People;
 import br.com.mocktester.api.domain.dto.PeopleDTO;
 import br.com.mocktester.api.services.impl.PeopleServiceImpl;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import java.util.Optional;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -64,6 +64,7 @@ class PeopleResourceTest {
 
         assertNotNull(response);
         assertNotNull(response.getBody());
+
         assertEquals(ResponseEntity.class, response.getClass());
         assertEquals(PeopleDTO.class, response.getBody().getClass());
 
@@ -72,12 +73,30 @@ class PeopleResourceTest {
         assertEquals(EMAIL, response.getBody().getEmail());
         assertEquals(PASS, response.getBody().getPassword());
 
-
-
     }
 
     @Test
-    void findAllPeople() {
+    void whenFindAllPeopleThenReturnAListOfPeopleDTO() {
+        when(peopleService.findAllPeople()).thenReturn(List.of(people));
+        when(mapper.map(any(), any())).thenReturn(peopleDTO);
+
+        ResponseEntity<List<PeopleDTO>> responseList = peopleResource.findAllPeople();
+
+        assertNotNull(responseList);
+        assertNotNull(responseList.getBody());
+
+        assertEquals(HttpStatus.OK, responseList.getStatusCode());
+        assertEquals(ResponseEntity.class, responseList.getClass());
+        assertEquals(ArrayList.class, responseList.getBody().getClass());
+        assertEquals(PeopleDTO.class, responseList.getBody().get(INDEX).getClass());
+
+        assertEquals(ID, responseList.getBody().get(INDEX).getId());
+        assertEquals(NAME, responseList.getBody().get(INDEX).getName());
+        assertEquals(EMAIL, responseList.getBody().get(INDEX).getEmail());
+        assertEquals(PASS, responseList.getBody().get(INDEX).getPassword());
+
+
+
     }
 
     @Test
