@@ -100,7 +100,16 @@ class PeopleResourceTest {
     }
 
     @Test
-    void create() {
+    void whenCreateThenReturnSuccess() {
+        when(peopleService.create(any())).thenReturn(people);
+
+        ResponseEntity<PeopleDTO> response = peopleResource.create(peopleDTO);
+
+        assertNotNull(response);
+        assertNotNull(response.getHeaders().get("Location"));
+        assertEquals(ResponseEntity.class, response.getClass());
+        assertEquals(HttpStatus.CREATED, response.getStatusCode());
+
     }
 
     @Test
