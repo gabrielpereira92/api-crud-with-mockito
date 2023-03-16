@@ -1,5 +1,6 @@
 package br.com.mocktester.api.resources.exceptions;
 
+import br.com.mocktester.api.services.exceptions.DataIntegrityViolationException;
 import br.com.mocktester.api.services.exceptions.ObjectNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,6 +16,8 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 class ResourceExceptionHandlerTest {
 
+
+    public static final String EMAIL_ALREADY_EXISTENT = "Email já cadastrado";
     @InjectMocks
     private ResourceExceptionHandler resourceExceptionHandler;
 
@@ -40,6 +43,18 @@ class ResourceExceptionHandlerTest {
     }
 
     @Test
-    void validationEmail() {
+    void whenDataIntegratyViolationException() {
+
+        ResponseEntity<StandardError> response = resourceExceptionHandler
+                .validationEmail(new DataIntegrityViolationException(EMAIL_ALREADY_EXISTENT), new MockHttpServletRequest());
+
+        assertNotNull(response);
+        assertNotNull(response.getBody());
+
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertEquals(ResponseEntity.class, response.getClass());
+        assertEquals(StandardError.class, response.getBody().getClass());
+        assertEquals(EMAIL_ALREADY_EXISTENT, response.getBody().getError());
+        assertEquals(400, response.getBody().getStatus());
     }
 }
