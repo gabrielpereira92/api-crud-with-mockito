@@ -4,6 +4,7 @@ import br.com.mocktester.api.domain.dto.PeopleDTO;
 import br.com.mocktester.api.services.PeopleService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -14,12 +15,13 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/people")
-@RequiredArgsConstructor
 public class PeopleResource {
 
     public static final String ID = "/{id}";
-    private final ModelMapper mapper;
-    private final PeopleService peopleService;
+    @Autowired
+    private ModelMapper mapper;
+    @Autowired
+    private PeopleService peopleService;
 
     @GetMapping(value = ID)
     public ResponseEntity<PeopleDTO> findById(@PathVariable Integer id){
