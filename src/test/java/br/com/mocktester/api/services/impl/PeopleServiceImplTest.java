@@ -3,7 +3,7 @@ package br.com.mocktester.api.services.impl;
 import br.com.mocktester.api.domain.People;
 import br.com.mocktester.api.domain.dto.PeopleDTO;
 import br.com.mocktester.api.repository.PeopleRepository;
-import br.com.mocktester.api.services.exceptions.DataIntegratyViolationException;
+import br.com.mocktester.api.services.exceptions.DataIntegrityViolationException;
 import br.com.mocktester.api.services.exceptions.ObjectNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -118,7 +118,7 @@ class PeopleServiceImplTest {
             optionalPeople.get().setId(2);
             peopleService.create(peopleDTO);
         } catch (Exception ex) {
-            assertEquals(DataIntegratyViolationException.class, ex.getClass());
+            assertEquals(DataIntegrityViolationException.class, ex.getClass());
             assertEquals(EMAIL_ALREADY_EXISTENT, ex.getMessage());
         }
 
@@ -148,7 +148,7 @@ class PeopleServiceImplTest {
             optionalPeople.get().setId(2);
             peopleService.update(peopleDTO);
         } catch (Exception ex) {
-            assertEquals(DataIntegratyViolationException.class, ex.getClass());
+            assertEquals(DataIntegrityViolationException.class, ex.getClass());
             assertEquals(EMAIL_ALREADY_EXISTENT, ex.getMessage());
 
         }

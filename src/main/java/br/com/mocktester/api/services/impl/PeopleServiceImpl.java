@@ -4,9 +4,8 @@ import br.com.mocktester.api.domain.People;
 import br.com.mocktester.api.domain.dto.PeopleDTO;
 import br.com.mocktester.api.repository.PeopleRepository;
 import br.com.mocktester.api.services.PeopleService;
-import br.com.mocktester.api.services.exceptions.DataIntegratyViolationException;
+import br.com.mocktester.api.services.exceptions.DataIntegrityViolationException;
 import br.com.mocktester.api.services.exceptions.ObjectNotFoundException;
-import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -57,7 +56,7 @@ public class PeopleServiceImpl implements PeopleService {
     private void findByEmail(PeopleDTO obj){
         Optional<People> people = peopleRepository.findByEmail(obj.getEmail());
         if (people.isPresent() && !people.get().getId().equals(obj.getId())) {
-            throw new DataIntegratyViolationException("Email já cadastrado");
+            throw new DataIntegrityViolationException("Email já cadastrado");
         }
     }
 }
